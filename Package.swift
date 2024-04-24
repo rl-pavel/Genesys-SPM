@@ -1,23 +1,26 @@
-// swift-tools-version: 5.10
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
+// swift-tools-version: 5.9
 import PackageDescription
+
+struct Binary {
+    let name: String
+    let path: String
+    var target: String { name + "Target" }
+}
+
+let binaries: [Binary] = [
+    Binary(name: "GenesysCloud", path: "Sources/GenesysCloud.xcframework"),
+    Binary(name: "GenesysCloudAccessibility", path: "Sources/GenesysCloudAccessibility.xcframework"),
+    Binary(name: "GenesysCloudBold", path: "Sources/GenesysCloudBold.xcframework"),
+    Binary(name: "GenesysCloudBot", path: "Sources/GenesysCloudBot.xcframework"),
+    Binary(name: "GenesysCloudCore", path: "Sources/GenesysCloudCore.xcframework"),
+    Binary(name: "GenesysCloudMessenger", path: "Sources/GenesysCloudMessenger.xcframework"),
+    Binary(name: "MessengerTransport", path: "Sources/MessengerTransport.xcframework"),
+]
 
 let package = Package(
     name: "Genesys",
-    products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "Genesys",
-            targets: ["Genesys"]),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "Genesys"),
-        .testTarget(
-            name: "GenesysTests",
-            dependencies: ["Genesys"]),
-    ]
+    platforms: [.iOS(.v15)],
+    products: binaries.map { Product.library(name: $0.name, targets: [$0.target]) },
+//    products: [.library(name: "Genesys", targets: targets.map(\.name))],
+    targets: binaries.map { Target.binaryTarget(name: $0.target, path: $0.path) }
 )

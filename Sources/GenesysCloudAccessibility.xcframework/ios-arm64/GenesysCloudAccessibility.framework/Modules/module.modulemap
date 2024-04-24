@@ -1,0 +1,6 @@
+framework module GenesysCloudAccessibility {
+  umbrella header "GenesysCloudAccessibility.h"
+  export *
+
+  module * { export * }
+}
